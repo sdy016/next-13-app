@@ -1,5 +1,12 @@
-import Image from "next/image";
+import Counter from '@/components/Counter';
+import Image from 'next/image';
 
 export default function Home() {
-  return <h1>Home</h1>;
+  console.log('Hello server');
+  return (
+    <>
+      <h1>Home</h1>
+      <Counter />
+    </>
+  );
 }

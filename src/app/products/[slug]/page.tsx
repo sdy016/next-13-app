@@ -1,37 +1,38 @@
-import React from "react";
-import { notFound } from "next/navigation";
+import React from 'react';
+import { notFound } from 'next/navigation';
 type Props = {
   params: {
     slug: string;
   };
 };
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
+import { Product, getProduct, getProducts } from '@/service/products';
+
+export const revalidate = 3;
 
 export function generateMetadata({ params }: Props) {
   return {
     title: `제품의 이름 ${params.slug}`,
   };
 }
-// export const metadata: Metadata = {
-//   title: "멋진 제품 사이트 | 전체 제품 확인",
-//   description: "멋진 제품",
-//   icons: {
-//     icon: "/favicon.ico",
-//   },
-// };
 
-const Item = ({ params: { slug } }: Props) => {
-  if (slug === "nothing") {
+const Item = async ({ params: { slug } }: Props) => {
+  const product: Product | undefined = await getProduct(slug);
+
+  if (!product) {
     notFound();
   }
-  return <h1>{decodeURI(slug)} Item</h1>;
+  // if (slug === 'nothing') {
+  //   notFound();
+  // }
+  return <h1>{product.name} Item</h1>;
 };
 
 export default Item;
 
-export function generateStaticParams() {
-  const products = ["pants", "skirt"];
+export async function generateStaticParams() {
+  const products = await getProducts();
   return products.map((product) => ({
-    slug: product,
+    slug: product.id,
   }));
 }

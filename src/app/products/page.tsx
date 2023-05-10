@@ -1,18 +1,21 @@
-import Link from "next/link";
-import React from "react";
+import { Product, getProducts } from '@/service/products';
+import Link from 'next/link';
+import React from 'react';
+
+export const revalidate = 3;
 
 type Props = {};
 
-const products = ["shirt", "pants", "skirt", "shoes"];
+const Products = async (props: Props) => {
+  const products: Product[] = await getProducts();
 
-const Products = (props: Props) => {
   return (
     <div>
       <h1>제품 소개 페이지!</h1>
       <ul>
-        {products.map((product) => (
-          <li key={product}>
-            <Link href={`/products/${product}`}>{product}</Link>
+        {products.map((product: Product) => (
+          <li key={product.id}>
+            <Link href={`/products/${product.id}`}>{product.name}</Link>
           </li>
         ))}
       </ul>
