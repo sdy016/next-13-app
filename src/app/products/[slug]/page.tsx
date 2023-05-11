@@ -1,14 +1,17 @@
 import React from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+
+import { Product, getProduct, getProducts } from '@/service/products';
+import Image, { StaticImageData } from 'next/image';
+import GoProductsButton from '@/components/GoProductsButton';
+
+export const revalidate = 3;
+
 type Props = {
   params: {
     slug: string;
   };
 };
-import type { Metadata } from 'next';
-import { Product, getProduct, getProducts } from '@/service/products';
-
-export const revalidate = 3;
 
 export function generateMetadata({ params }: Props) {
   return {
@@ -20,12 +23,18 @@ const Item = async ({ params: { slug } }: Props) => {
   const product: Product | undefined = await getProduct(slug);
 
   if (!product) {
-    notFound();
+    redirect('/products');
+    // notFound();
   }
-  // if (slug === 'nothing') {
-  //   notFound();
-  // }
-  return <h1>{product.name} Item</h1>;
+  return (
+    <>
+      <h1>{product.name} Item</h1>
+      <div>
+        <Image src={`/images/${product.image}`} alt={product.name} width={400} height={400} />
+        <GoProductsButton />
+      </div>
+    </>
+  );
 };
 
 export default Item;
