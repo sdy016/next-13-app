@@ -5,7 +5,7 @@ import styles from './page.module.css';
 import MeowArticle from '@/components/MeowArticle';
 import Image from 'next/image';
 import clothesImage from '../../../public/images/clothes.jpg';
-// export const revalidate = 3;
+
 
 type Props = {};
 
